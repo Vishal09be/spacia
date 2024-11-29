@@ -5,7 +5,7 @@ const API_MASTER_DATA_URL = `${API_BASE_URL}/master`;
 const API_REGISTER_URL = `${API_BASE_URL}/auth/register`;
 const API_LOGIN_URL = `${API_BASE_URL}/auth/login`;
 const API_BOOKING_URL = `${API_BASE_URL}/booking`;
-const APP_NAME = 'FastEx'
+const APP_NAME = 'SPACIA'
 
 export {
   API_URL,
