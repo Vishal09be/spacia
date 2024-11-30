@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_REGISTER_URL, APP_NAME } from '../utils/constants';
-import Logo from "../assets/fastex.png"
+import { FiArrowRight } from 'react-icons/fi';
+import Logo from "../assets/spacia.png"
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -81,129 +82,144 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Navigation Bar */}
-            <nav className="bg-white shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                        <img src={Logo} alt="Logo" className="h-8 w-8" />
-                        <span className="text-xl font-semibold text-gray-800">{APP_NAME}</span>
+        <div className="min-h-screen bg-gradient-to-br from-[#FDF2E9] via-white to-[#FAE5D3] flex items-center justify-center px-4 py-8">
+            <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                {/* Left Column - Branding */}
+                <div className="hidden lg:flex flex-col justify-center space-y-8">
+                    <div className="flex items-center space-x-3">
+                        <img src={Logo} alt="Logo" className="h-12 w-12" />
+                        <h1 className="text-3xl font-bold text-gray-900">{APP_NAME}</h1>
                     </div>
-                    <a href="/login" className="text-sm text-gray-600 hover:text-gray-900">
-                        Already have an account?
-                    </a>
+                    <div className="space-y-6">
+                        <h2 className="text-4xl font-bold text-gray-900">Start your journey!</h2>
+                        <p className="text-xl text-gray-600">Join our community and discover amazing properties across Dublin.</p>
+                    </div>
+
+                    {/* Feature Grid */}
+                    <div className="grid grid-cols-2 gap-6">
+                        {[
+                            { title: 'Fast Setup', desc: 'Get started in minutes', icon: '⚡' },
+                            { title: 'Secure', desc: 'Enterprise-grade security', icon: '🔒' },
+                            { title: '24/7 Support', desc: 'Always here to help', icon: '💬' },
+                            { title: 'Updates', desc: 'Regular feature updates', icon: '🔄' }
+                        ].map((feature, index) => (
+                            <div key={index} className="bg-white p-6 rounded-2xl shadow-sm">
+                                <div className="text-2xl mb-2">{feature.icon}</div>
+                                <h3 className="font-semibold text-gray-900">{feature.title}</h3>
+                                <p className="text-sm text-gray-600 mt-1">{feature.desc}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </nav>
 
-            {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    {/* Left Column - Form */}
-                    <div className="bg-white rounded-2xl shadow-xl p-8">
-                        <h1 className="text-2xl font-bold text-gray-900 mb-8">Join {APP_NAME}</h1>
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="flex flex-col md:flex-row gap-4">
-                                <div className="flex-1">
-                                    <input
-                                        type="text"
-                                        placeholder="First name"
-                                        value={formData.firstname}
-                                        onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border-transparent focus:border-gray-300 focus:bg-white focus:ring-0"
-                                    />
-                                    {errors.firstname && <p className="mt-1 text-sm text-red-500">{errors.firstname}</p>}
-                                </div>
-                                <div className="flex-1">
-                                    <input
-                                        type="text"
-                                        placeholder="Last name"
-                                        value={formData.lastname}
-                                        onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border-transparent focus:border-gray-300 focus:bg-white focus:ring-0"
-                                    />
-                                    {errors.lastname && <p className="mt-1 text-sm text-red-500">{errors.lastname}</p>}
-                                </div>
-                            </div>
-
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                value={formData.username}
-                                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-gray-50 border-transparent focus:border-gray-300 focus:bg-white focus:ring-0"
-                            />
-                            {errors.username && <p className="mt-1 text-sm text-red-500">{errors.username}</p>}
-
-                            <input
-                                type="email"
-                                placeholder="Email address"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-gray-50 border-transparent focus:border-gray-300 focus:bg-white focus:ring-0"
-                            />
-                            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-
-                            <div className="flex flex-col md:flex-row gap-4">
-                                <div className="flex-1">
-                                    <input
-                                        type="password"
-                                        placeholder="Password"
-                                        value={formData.password}
-                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border-transparent focus:border-gray-300 focus:bg-white focus:ring-0"
-                                    />
-                                    {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-                                </div>
-                                <div className="flex-1">
-                                    <input
-                                        type="password"
-                                        placeholder="Confirm password"
-                                        value={formData.confirmPassword}
-                                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border-transparent focus:border-gray-300 focus:bg-white focus:ring-0"
-                                    />
-                                    {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
-                                </div>
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
-                            >
-                                {isLoading ? 'Creating account...' : 'Create account'}
-                            </button>
-                        </form>
+                {/* Right Column - Registration Form */}
+                <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full mx-auto">
+                    <div className="mb-8 text-center lg:text-left">
+                        <h3 className="text-2xl font-bold text-gray-900">Create your account</h3>
+                        <p className="text-gray-600 mt-2">Fill in your details to get started</p>
                     </div>
 
-                    {/* Right Column - Features */}
-                    <div className="flex flex-col justify-center space-y-8">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Name Fields */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="First name"
+                                    value={formData.firstname}
+                                    onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#E67E22] focus:ring-2 focus:ring-[#E67E22] focus:ring-opacity-20 transition-colors"
+                                />
+                                {errors.firstname && <p className="mt-1 text-sm text-red-500">{errors.firstname}</p>}
+                            </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Last name"
+                                    value={formData.lastname}
+                                    onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#E67E22] focus:ring-2 focus:ring-[#E67E22] focus:ring-opacity-20 transition-colors"
+                                />
+                                {errors.lastname && <p className="mt-1 text-sm text-red-500">{errors.lastname}</p>}
+                            </div>
+                        </div>
+
+                        {/* Username and Email Fields */}
                         <div className="space-y-4">
-                            <h2 className="text-3xl font-bold text-gray-900">Why choose {APP_NAME}?</h2>
-                            <p className="text-gray-600">Join millions of users who trust us for their business needs.</p>
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Username"
+                                    value={formData.username}
+                                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#E67E22] focus:ring-2 focus:ring-[#E67E22] focus:ring-opacity-20 transition-colors"
+                                />
+                                {errors.username && <p className="mt-1 text-sm text-red-500">{errors.username}</p>}
+                            </div>
+                            <div>
+                                <input
+                                    type="email"
+                                    placeholder="Email address"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#E67E22] focus:ring-2 focus:ring-[#E67E22] focus:ring-opacity-20 transition-colors"
+                                />
+                                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {[
-                                { title: 'Fast Setup', desc: 'Get started in minutes' },
-                                { title: 'Secure', desc: 'Enterprise-grade security' },
-                                { title: '24/7 Support', desc: 'Always here to help' },
-                                { title: 'Updates', desc: 'Regular feature updates' }
-                            ].map((feature, index) => (
-                                <div key={index} className="bg-white p-6 rounded-xl shadow-sm">
-                                    <h3 className="font-semibold text-gray-900">{feature.title}</h3>
-                                    <p className="text-sm text-gray-600 mt-1">{feature.desc}</p>
-                                </div>
-                            ))}
+                        {/* Password Fields */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#E67E22] focus:ring-2 focus:ring-[#E67E22] focus:ring-opacity-20 transition-colors"
+                                />
+                                {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
+                            </div>
+                            <div>
+                                <input
+                                    type="password"
+                                    placeholder="Confirm password"
+                                    value={formData.confirmPassword}
+                                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#E67E22] focus:ring-2 focus:ring-[#E67E22] focus:ring-opacity-20 transition-colors"
+                                />
+                                {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
+                            </div>
                         </div>
 
-                        <div className="pt-8 border-t border-gray-200">
-                            <p className="text-sm text-gray-500 text-center">
+                        {errors.submit && (
+                            <div className="bg-red-50 text-red-500 text-sm p-4 rounded-xl">
+                                {errors.submit}
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full bg-[#E67E22] text-white py-3 rounded-xl hover:bg-[#D35400] transition-colors flex items-center justify-center space-x-2"
+                        >
+                            <span>{isLoading ? 'Creating account...' : 'Create account'}</span>
+                            {!isLoading && <FiArrowRight />}
+                        </button>
+
+                        <div className="text-center">
+                            <span className="text-gray-600">Already have an account? </span>
+                            <a href="/login" className="text-[#E67E22] hover:text-[#D35400] font-medium">
+                                Sign in
+                            </a>
+                        </div>
+
+                        <div className="pt-4 text-center">
+                            <p className="text-sm text-gray-500">
                                 By creating an account, you agree to our Terms of Service and Privacy Policy
                             </p>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

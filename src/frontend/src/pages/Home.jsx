@@ -1,128 +1,139 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FiSearch, FiHome, FiMap, FiStar } from 'react-icons/fi';
 import { API_MASTER_DATA_URL } from '../utils/constants';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const [locations, setLocations] = useState([]);
-  const [bookingClasses, setBookingClasses] = useState([]);
-  const [fromLocation, setFromLocation] = useState('');
-  const [toLocation, setToLocation] = useState('');
-  const [selectedBookingClass, setSelectedBookingClass] = useState('');
   const navigate = useNavigate();
+  const [location, setLocation] = useState('');
+  const [propertyType, setPropertyType] = useState('');
+  const [masterData, setMasterData] = useState({
+    amenities: [],
+    propertyType: [],
+    locations: [],
+    energyRatings: []
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMasterData = async () => {
       try {
         const response = await fetch(API_MASTER_DATA_URL);
         const data = await response.json();
-        setLocations(data.locations);
-        setBookingClasses(data.bookingClass);
+        setMasterData(data);
+        console.log(data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching master data:', error);
       }
     };
 
-    fetchData();
+    fetchMasterData();
   }, []);
 
-  const handleBooking = () => {
-    if (fromLocation && toLocation && selectedBookingClass) {
-      if (fromLocation === toLocation) {
-        alert('From and To locations cannot be the same.');
-        return;
-      }
-      navigate('/booking', {
-        state: {
-          fromLocation,
-          toLocation,
-          bookingClass: selectedBookingClass
-        }
-      });
-    } else {
-      alert('Please select both locations and a booking class.');
-    }
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (location) params.append('location', location);
+    if (propertyType) params.append('propertyType', propertyType);
+    
+    navigate(`/properties${params.toString() ? `?${params.toString()}` : ''}`);
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 via-white to-gray-50 min-h-screen">
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            className="w-full h-full object-cover"
-            src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
-            alt="Delivery background"
-          />
-          <div className="absolute inset-0 bg-gray-900 opacity-75"></div>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-36">
-          <div className="text-center">
-            <h1 className="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
-              <span className="block xl:inline">Swift Parcel Delivery</span>{' '}
-              <span className="block text-indigo-400 xl:inline">Across Ireland</span>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      {/* Hero Section */}
+      <div className="relative h-[600px] bg-cover bg-center"
+        style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3")' }}>
+        <div className="absolute inset-0 bg-black bg-opacity-50">
+          <div className="container mx-auto px-6 py-32 text-center">
+            <h1 className="text-5xl font-bold text-white mb-6">
+              Find Your Perfect Home in Dublin
             </h1>
-            <p className="mt-3 max-w-md mx-auto text-base text-gray-300 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-              Fast, secure, and reliable parcel delivery service connecting all major cities in Ireland.
+            <p className="text-xl text-gray-200 mb-12">
+              Discover thousands of rental properties across Dublin's finest locations
             </p>
-          </div>
 
-          <div className="mt-12 sm:max-w-xl sm:mx-auto md:mt-16">
-            <div className="bg-white shadow-xl rounded-xl overflow-hidden backdrop-blur-lg bg-opacity-90">
-              <div className="px-6 py-8">
-                <div className="mb-4">
-                  <label htmlFor="fromLocation" className="block text-sm font-medium text-gray-700">From Location</label>
-                  <select
-                    id="fromLocation"
-                    value={fromLocation}
-                    onChange={(e) => setFromLocation(e.target.value)}
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                  >
-                    <option value="">--Select From Location--</option>
-                    {locations.map((location) => (
-                      <option key={location} value={location}>{location}</option>
-                    ))}
-                  </select>
-                </div>
+            {/* Search Bar */}
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <select
+                  className="p-3 border rounded-md"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                >
+                  <option value="">Select Location</option>
+                  {masterData.locations.map(loc => (
+                    <option key={loc} value={loc}>{loc}</option>
+                  ))}
+                </select>
 
-                <div className="mb-4">
-                  <label htmlFor="toLocation" className="block text-sm font-medium text-gray-700">To Location</label>
-                  <select
-                    id="toLocation"
-                    value={toLocation}
-                    onChange={(e) => setToLocation(e.target.value)}
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                  >
-                    <option value="">--Select To Location--</option>
-                    {locations.map((location) => (
-                      <option key={location} value={location}>{location}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="mb-4">
-                  <label htmlFor="bookingClass" className="block text-lg">Select Booking Class:</label>
-                  <select
-                    id="bookingClass"
-                    value={selectedBookingClass}
-                    onChange={(e) => setSelectedBookingClass(e.target.value)}
-                    className="mt-2 p-2 border border-gray-300 rounded"
-                  >
-                    <option value="">--Select Booking Class--</option>
-                    {bookingClasses.map((bookingClass) => (
-                      <option key={bookingClass} value={bookingClass}>{bookingClass}</option>
-                    ))}
-                  </select>
-                </div>
+                <select
+                  className="p-3 border rounded-md"
+                  value={propertyType}
+                  onChange={(e) => setPropertyType(e.target.value)}
+                >
+                  <option value="">Property Type</option>
+                  {masterData.propertyType.map(type => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
 
                 <button
-                  onClick={handleBooking}
-                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  onClick={handleSearch}
+                  className="bg-[#E67E22] text-white p-3 rounded-md hover:bg-[#D35400] transition-colors"
                 >
-                  Book Now
+                  <FiSearch className="inline mr-2" /> Search Properties
                 </button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div className="container mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="text-center p-6 bg-white rounded-lg shadow-md">
+            <FiHome className="text-4xl text-[#E67E22] mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Wide Range of Properties</h3>
+            <p className="text-gray-600">From studios to bungalows, find the perfect property that suits your needs</p>
+          </div>
+          <div className="text-center p-6 bg-white rounded-lg shadow-md">
+            <FiMap className="text-4xl text-[#E67E22] mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Prime Locations</h3>
+            <p className="text-gray-600">Properties available across all Dublin postal districts</p>
+          </div>
+          <div className="text-center p-6 bg-white rounded-lg shadow-md">
+            <FiStar className="text-4xl text-[#E67E22] mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Premium Amenities</h3>
+            <p className="text-gray-600">Modern facilities including security, gym, and parking</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Popular Amenities */}
+      <div className="bg-white py-16">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">Popular Amenities</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {masterData.amenities.map((amenity) => (
+              <div key={amenity} className="flex items-center p-4 border rounded-lg">
+                <div className="w-3 h-3 bg-[#E67E22] rounded-full mr-3"></div>
+                <span>{amenity}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Energy Ratings Section */}
+      <div className="container mx-auto px-6 py-16">
+        <h2 className="text-3xl font-bold text-center mb-8">Energy Efficiency Ratings</h2>
+        <div className="flex flex-wrap justify-center gap-4">
+          {masterData.energyRatings.map((rating) => (
+            <div key={rating}
+              className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-md">
+              {rating}
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -4,7 +4,8 @@ import axios from 'axios';
 import { setAuthToken } from '../utils/cookies';
 import { useAuth } from '../context/AuthContext';
 import { API_LOGIN_URL, APP_NAME } from '../utils/constants';
-import Logo from "../assets/fastex.png"
+import Logo from "../assets/spacia.png";
+import { FiLock, FiUser, FiArrowRight } from 'react-icons/fi';
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -86,137 +87,86 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Navigation Bar */}
-            <nav className="bg-white shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                        <img src={Logo} alt="Logo" className="h-8 w-8" />
-                        <span className="text-xl font-semibold text-gray-800">{APP_NAME}</span>
+        <div className="min-h-screen bg-gradient-to-br from-[#FDF2E9] via-white to-[#FAE5D3] flex items-center justify-center px-4">
+            <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                {/* Left Column - Branding */}
+                <div className="hidden lg:flex flex-col justify-center space-y-8">
+                    <div className="flex items-center space-x-3">
+                        <img src={Logo} alt="Logo" className="h-12 w-12" />
+                        <h1 className="text-3xl font-bold text-gray-900">{APP_NAME}</h1>
                     </div>
-                    <a href="/register" className="text-sm text-gray-600 hover:text-gray-900">
-                        Need an account?
-                    </a>
+                    <div className="space-y-6">
+                        <h2 className="text-4xl font-bold text-gray-900">Welcome back!</h2>
+                        <p className="text-xl text-gray-600">Access your account and discover amazing properties across Dublin.</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-6">
+                        <div className="bg-white p-6 rounded-2xl shadow-sm">
+                            <div className="text-2xl font-bold text-[#E67E22] mb-2">100K+</div>
+                            <div className="text-gray-600">Active Users</div>
+                        </div>
+                        <div className="bg-white p-6 rounded-2xl shadow-sm">
+                            <div className="text-2xl font-bold text-[#E67E22] mb-2">50K+</div>
+                            <div className="text-gray-600">Properties</div>
+                        </div>
+                    </div>
                 </div>
-            </nav>
 
-            {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    {/* Left Column - Features */}
-                    <div className="flex flex-col justify-center space-y-8 order-2 md:order-1">
+                {/* Right Column - Login Form */}
+                <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full mx-auto">
+                    <div className="mb-8 text-center lg:text-left">
+                        <h3 className="text-2xl font-bold text-gray-900">Sign in to your account</h3>
+                        <p className="text-gray-600 mt-2">Enter your credentials to continue</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-4">
-                            <h2 className="text-3xl font-bold text-gray-900">Welcome back!</h2>
-                            <p className="text-gray-600">Access your account and continue your journey with {APP_NAME}.</p>
+                            <div className="relative">
+                                <FiUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                <input
+                                    type="text"
+                                    placeholder="Username"
+                                    value={formData.username}
+                                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                    className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#E67E22] focus:ring-2 focus:ring-[#E67E22] focus:ring-opacity-20 transition-colors"
+                                />
+                            </div>
+                            {errors.username && <p className="text-sm text-red-500">{errors.username}</p>}
+
+                            <div className="relative">
+                                <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#E67E22] focus:ring-2 focus:ring-[#E67E22] focus:ring-opacity-20 transition-colors"
+                                />
+                            </div>
+                            {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
                         </div>
 
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-4">
-                                <div className="flex-shrink-0 w-12 h-12 bg-black rounded-full flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Secure Access</h3>
-                                    <p className="text-sm text-gray-600">Your data is protected with enterprise-grade security</p>
-                                </div>
+                        {errors.submit && (
+                            <div className="bg-red-50 text-red-500 text-sm p-4 rounded-xl">
+                                {errors.submit}
                             </div>
+                        )}
 
-                            <div className="flex items-center gap-4">
-                                <div className="flex-shrink-0 w-12 h-12 bg-black rounded-full flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Fast Performance</h3>
-                                    <p className="text-sm text-gray-600">Lightning-fast access to all your resources</p>
-                                </div>
-                            </div>
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full bg-[#E67E22] text-white py-3 rounded-xl hover:bg-[#D35400] transition-colors flex items-center justify-center space-x-2"
+                        >
+                            <span>{isLoading ? 'Signing in...' : 'Sign in'}</span>
+                            {!isLoading && <FiArrowRight />}
+                        </button>
+
+                        <div className="text-center">
+                            <span className="text-gray-600">Don't have an account? </span>
+                            <a href="/register" className="text-[#E67E22] hover:text-[#D35400] font-medium">
+                                Create one now
+                            </a>
                         </div>
-
-                        <div className="pt-8 border-t border-gray-200">
-                            <div className="grid grid-cols-3 gap-4 text-center">
-                                <div>
-                                    <div className="text-2xl font-bold text-black">99.9%</div>
-                                    <div className="text-sm text-gray-600">Uptime</div>
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold text-black">24/7</div>
-                                    <div className="text-sm text-gray-600">Support</div>
-                                </div>
-                                <div>
-                                    <div className="text-2xl font-bold text-black">100K+</div>
-                                    <div className="text-sm text-gray-600">Users</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Right Column - Form */}
-                    <div className="bg-white rounded-2xl shadow-xl p-8 order-1 md:order-2">
-                        <h1 className="text-2xl font-bold text-gray-900 mb-8">Sign in to your account</h1>
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                value={formData.username}
-                                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-gray-50 border-transparent focus:border-gray-300 focus:bg-white focus:ring-0"
-                            />
-                            {errors.username && <p className="mt-1 text-sm text-red-500">{errors.username}</p>}
-
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                className="w-full px-4 py-3 rounded-lg bg-gray-50 border-transparent focus:border-gray-300 focus:bg-white focus:ring-0"
-                            />
-                            {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-
-                            {errors.submit && (
-                                <div className="bg-red-50 text-red-500 text-sm p-3 rounded-lg">
-                                    {errors.submit}
-                                </div>
-                            )}
-
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
-                            >
-                                {isLoading ? 'Signing in...' : 'Sign in'}
-                            </button>
-
-                            <div className="relative my-6">
-                                <div className="absolute inset-0 flex items-center">
-                                    <div className="w-full border-t border-gray-200"></div>
-                                </div>
-                                <div className="relative flex justify-center text-sm">
-                                    <span className="px-2 bg-white text-gray-500">Or continue with</span>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-3">
-                                {['google', 'facebook', 'linkedin'].map((provider) => (
-                                    <button
-                                        key={provider}
-                                        type="button"
-                                        className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                                    >
-                                        <img
-                                            className="h-5 w-5"
-                                            src={`https://www.svgrepo.com/show/475${provider === 'google' ? '656' : provider === 'facebook' ? '647' : '669'}/${provider}-color.svg`}
-                                            alt={provider}
-                                        />
-                                    </button>
-                                ))}
-                            </div>
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
