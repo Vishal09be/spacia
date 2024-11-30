@@ -24,6 +24,7 @@ public class Property {
     @Column(length = 3000)
     private String address;
     private String eircode;
+    @Column(length = 3000)
     private String description;
     private String postalCode;
     private BigDecimal rent;
