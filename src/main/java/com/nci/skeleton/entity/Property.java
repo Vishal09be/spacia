@@ -35,6 +35,7 @@ public class Property {
     private Integer bedrooms;
     private Integer bathrooms;
     private List<String> amenities;
+    @Column(length = 3000)
     private List<String> images;
     private String propertyType;
     private String status;
