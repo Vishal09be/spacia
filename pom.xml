@@ -105,15 +105,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>com.nci</groupId>
-			<artifactId>Upload-Library</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/resources/Upload-Library-1.0.jar</systemPath>
-		</dependency>
-
 	</dependencies>
 
 	<build>
