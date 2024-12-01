@@ -32,14 +32,14 @@ const PropertyDetails = () => {
     const handleContactOwner = async () => {
 
         if (!user) {
-            navigate('/login', { state: { from: /property/${id} } });
+            navigate('/login', { state: { from: `/property/${id}` } });
         }
 
         try {
-            const response = await fetch(${API_PROPERTY_URL}/contact/${property.id}, {
+            const response = await fetch(`${API_PROPERTY_URL}/contact/${property.id}`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': Bearer ${getAuthToken()},
+                    'Authorization': `Bearer ${getAuthToken()}`,
                 }
             });
 
@@ -61,7 +61,7 @@ const PropertyDetails = () => {
             <div className="relative w-full h-[400px] mb-8">
                 <img
                     src={property.images[currentImageIndex]}
-                    alt={${property.name} - img-${currentImageIndex + 1}}
+                    alt={`${property.name} - img-${currentImageIndex + 1}`}
                     className="w-full h-full object-cover rounded-lg"
                 />
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
@@ -184,4 +184,4 @@ const PropertyDetails = () => {
     );
 };
 
-export default PropertyDetails;
+export default PropertyDetails; 
