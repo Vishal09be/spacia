@@ -5,6 +5,7 @@ import { FaBed, FaSwimmingPool, FaDumbbell, FaWater, FaShieldAlt, FaVideo, FaFir
 import { useAuth } from '../context/AuthContext';
 import { API_PROPERTY_URL } from '../utils/constants';
 import { getAuthToken } from '../utils/cookies';
+import { useState, useEffect } from 'react';
 
 const PropertyDetails = () => {
     const { state } = useLocation();
@@ -12,6 +13,17 @@ const PropertyDetails = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const property = state?.property;
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentImageIndex((prevIndex) =>
+                prevIndex === property.images.length - 1 ? 0 : prevIndex + 1
+            );
+        }, 5000);
+
+        return () => clearInterval(timer);
+    }, [property.images.length]);
 
     if (!property) {
         return <div>Property not found</div>;
@@ -20,14 +32,14 @@ const PropertyDetails = () => {
     const handleContactOwner = async () => {
 
         if (!user) {
-            navigate('/login', { state: { from: `/property/${id}` } });
+            navigate('/login', { state: { from: /property/${id} } });
         }
 
         try {
-            const response = await fetch(`${API_PROPERTY_URL}/contact/${property.id}`, {
+            const response = await fetch(${API_PROPERTY_URL}/contact/${property.id}, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${getAuthToken()}`,
+                    'Authorization': Bearer ${getAuthToken()},
                 }
             });
 
@@ -46,15 +58,22 @@ const PropertyDetails = () => {
     return (
         <div className="container mx-auto px-6 py-8">
             {/* Image Gallery */}
-            <div className="grid grid-cols-2 gap-4 mb-8">
-                {property.images.map((image, index) => (
-                    <img
-                        key={index}
-                        src={image}
-                        alt={`${property.name} - Imgid ${index + 1}`}
-                        className="w-full h-[400px] object-cover rounded-lg"
-                    />
-                ))}
+            <div className="relative w-full h-[400px] mb-8">
+                <img
+                    src={property.images[currentImageIndex]}
+                    alt={${property.name} - img-${currentImageIndex + 1}}
+                    className="w-full h-full object-cover rounded-lg"
+                />
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                    {property.images.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentImageIndex(index)}
+                            className={`w-3 h-3 rounded-full ${currentImageIndex === index ? 'bg-[#E67E22]' : 'bg-white'
+                                }`}
+                        />
+                    ))}
+                </div>
             </div>
 
             {/* Property Header */}
@@ -165,4 +184,4 @@ const PropertyDetails = () => {
     );
 };
 
-export default PropertyDetails; 
+export default PropertyDetails;
